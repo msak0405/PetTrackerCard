@@ -1,0 +1,54 @@
+<template>
+    <div class="d221_card_box">
+        <div class="d221_box">
+            <text class="d221_text_12sp">{{textArray[0]}}</text>
+            <text class="d221_text_14sp d221_marginVerticalS">{{textArray[1]}}</text>
+        </div>
+
+        <div class="d221_box">
+            <text class="d221_text_12sp">{{textArray[2]}}</text>
+            <text class="d221_text_14sp d221_marginVerticalS">{{textArray[3]}}</text>
+        </div>
+
+    </div>
+
+</template>
+<style lang="sass">
+	@import "../../css/basic.scss";
+
+	.d221_card_box {
+		padding: dpConvert($elementsMarginVerticalL) dpConvert(0) dpConvert($elementsMarginVerticalL) dpConvert(0);
+	}
+
+    .d221_box{
+        flex: 1;
+        flex-direction: column;
+    }
+
+	.d221_text_12sp {
+		width: 100%;
+		@include textSizeCardCaption1;
+        color: $textColorSecondary;
+	}
+
+	.d221_text_14sp {
+		width: 100%;
+		@include textSizeCardCaption2;
+        color: $textColorPrimary;
+	}
+
+	.d221_marginVerticalS {
+		margin-top: dpConvert($elementsMarginVerticalS);
+	}
+</style>
+
+<script>
+    module.exports = {
+		props: [
+            'textArray'
+        ],
+        data: {
+            textArray: ['Regular 12sp','Medium 14sp','Regular 12sp','Medium 14sp']
+        },
+    }
+</script>

@@ -1,0 +1,91 @@
+<import name="card_title" src="../common/component/card_title/card_title.ux"></import>
+<import name="b2_0" src="../common/component/b2_0/b2_0.ux"></import>
+<import name="d2_2_1" src="../common/component/d2_2_1/d2_2_1.ux"></import>
+<import name="f1_1" src="../common/component/f1_1/f1_1.ux"></import>
+<import name="card_bottom_3" src="../common/component/card_bottom_3/card_bottom_3.ux"></import>
+<template>
+    <div class="sitetype_box" widgetid="8e4bf1ca-f716-46f8-8614-16d1b35002c5">
+        <card_title title="{{$t('message.title')}}"></card_title>
+        <div>
+            <div style="align-items: center;flex: 1;">
+            <progress type="circular" show="{{isDataFetching}}" />
+                <div onclick="mainDivClick({{petName[0]}})" style="flex-direction: column;flex: 1;">
+                    <b2_0 text-array='{{petName}}'></b2_0>
+                    <d2_2_1 text-array="{{locationData}}"></d2_2_1>
+                </div>
+            </div>
+            <f1_1 onclick="imgClick({{petName[0]}})" id="imgmap" src='{{urlData}}' url='{{urlData}}'></f1_1>
+        </div>
+        <card_bottom_3 onclick="showApp" button-array="{{$t('message.buttonArray')}}"></card_bottom_3>
+        
+    </div>
+</template>
+<style lang="sass">
+    @import '../common/css/basic.scss';
+
+    .sitetype_box {
+        flex-direction: column;
+        padding: dpConvert(0) dpConvert($elementsMarginHorizontalL) dpConvert(0) dpConvert($elementsMarginHorizontalL);
+    }
+</style>
+
+<script>
+    const locales = {
+        en: require('./i18n/en.js')
+    }
+    import configuration from '@system.configuration'
+    import app from "@system.app"; //or var app = require("@system.app")
+    import router from "@system.router"; //or var router = require("@system.router")
+    import pkg from "@system.package"; //or var pkg = require("@system.package")
+    import fetch from '@system.fetch'
+    const localeObject = configuration.getLocale(); 
+    let local = localeObject.language;
+    const $i18n = new I18n({ locale: local, messages: locales, fallbackLocale: 'en' });
+    const mainUri = "pettracker://pet-tracker.fi"; // Deeplink URI of our native app
+    module.exports = {
+        data: {
+            isDataFetching: "false",
+            petData: [],
+            petName: [],
+            locationData: [],
+            urlData: '',
+            'dividings': ['newsandinformationtype_dividing', '', ''],
+            i18n: $i18n
+        },
+        onInit: function () { 
+            this.loadPetList()
+        },
+       loadPetList: function () {
+           var self = this;
+           this.isDataFetching = "true";
+           fetch.fetch({
+               url: "https://cardpettracker.herokuapp.com/petapp/petlist?nos=1",
+               success: function (ret) { 
+                   self.petData =  JSON.parse(ret.data) 
+                   let name = self.petData[0].petName;
+                   let location = self.petData[0].lastLocation;
+                   let url = self.petData[0].url;
+                   self.petName = [name,'has gone outside safezone']
+                   self.locationData = ['Last location',location]
+                   self.urlData = url;
+                   self.isDataFetching = "false";
+               },
+               fail: function (data, code) {
+                   console.log("handling fail, code=" + code);
+                   self.isDataFetching = "false";
+               },
+           })
+       },
+        mainDivClick: function (msg) { // This function handles main div click event
+            router.push({ uri: mainUri + "/track?param=" + msg }); 
+        },
+        imgClick: function (msg) { // This function handles image click event
+            router.push({ uri: mainUri + "/heatmap/" + msg });
+        },
+        showApp: function () { // This function handles view more click event
+            router.push({ uri: mainUri + "/home" });
+        }
+    }
+
+
+</script>

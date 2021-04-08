@@ -1,0 +1,55 @@
+<template>
+    <div class="a312_box">
+        <div style="align-items: center;">
+            <text class="a312_number_14sp a312_colorPrimary">{{textArray[0]}}</text>
+        </div>
+
+        <div style="align-items: center;" class="a312_marginVerticalS">
+            <text class="a312_number_14sp a312_colorSecondary">{{textArray[1]}}</text>
+        </div>
+
+        <div style="align-items: center;" class="a312_marginVerticalS">
+            <text class="a312_number_30sp a312_colorPrimary">{{textArray[2]}}</text>
+        </div>
+    </div>
+
+</template>
+<style lang="sass">
+    @import "../../css/basic.scss";
+
+    .a312_box {
+        flex-direction: column;
+        padding: dpConvert($elementsMarginVerticalL) dpConvert(0) dpConvert($elementsMarginVerticalL) dpConvert(0);
+    }
+
+    .a312_colorSecondary {
+        color: $textColorSecondary;
+    }
+
+    .a312_colorPrimary {
+        color: $textColorPrimary;
+    }
+
+    .a312_number_14sp {
+        @include textSizeCardBody3;
+    }
+
+    .a312_number_30sp {
+        @include textSizeCardNum1;
+    }
+
+    .a312_marginVerticalS {
+        margin-top: dpConvert($elementsMarginVerticalS);
+    }
+</style>
+
+<script>
+    module.exports = {
+        props: [
+            'textArray'
+        ],
+        data: {
+            textArray: ['Regular 14sp', 'Regular 14sp', 'Medium 30sp']
+        },
+    }
+</script>
